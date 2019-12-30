@@ -1,0 +1,188 @@
+@()
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+Id:&nbsp<input type="hidden" name="id" id="id" ><br><br>
+Name:&nbsp<input type="text" name="name" id="name" pattern="([^\s][A-z\s]+)"><br><br>
+Email:&nbsp<input type="email" name="email" id="email" ><br><br>
+Phone:&nbsp<input type="text" name="phone" id="phone"><br><br>
+
+<input class="submit" type="submit" value="Submit" id="submit">
+<input class="Update" type="submit" value="Update" id="Update">
+
+<div class="container">
+    <div class="container-fluid"   align="center" >
+
+        <h1>Details </h1>
+
+        <br>
+        <table class="table" id="table">
+            <thead class="thead-dark">
+            <tbody>
+            <tr>
+                <th > Id </th>
+                <th > Name </th>
+                <th> Email </th>
+                <th>Phone</th>
+                <th> Action </th>
+            </tr>
+
+            <thead class="thead-dark">
+           </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+        $("#submit").click(function(){
+            submitRegistrationData();
+        });
+
+function submitRegistrationData(){
+var name = $('input#name').val();
+var email = $('input#email').val();
+var phone= $('input#phone').val();
+
+
+$.ajax({
+url: '/savedata',   <!-- url for saving-->
+ dataType: 'JSON',
+   type: "POST",
+            data:{
+
+                'name': name,
+
+                'email': email,
+                'phone': phone,
+
+            },
+
+             success: function (data) {
+                window.location.href = "/list";   <!-- to redirect-->
+                },
+            error: function (data) {
+                console.log(" error"+ data);
+            }
+});
+}
+});
+
+<!---------------------------------------------->
+
+  $(document).ready(function(){
+    $.ajax({
+        url: "http://localhost:9000/form",
+        dataType: 'json',
+        type: 'get',
+        cache:false,
+        success: function(data){
+
+            var event_data = '';
+            $.each(data, function(index, value){
+                /*console.log(value);*/
+
+                event_data += '<tr data-id="'+value.id+'">';
+                event_data += '<td>'+value.id+'</td>';
+                event_data += '<td>'+value.name+'</td>';
+                event_data += '<td>'+value.email+'</td>';
+                event_data += '<td>'+value.phone+'</td>';
+                event_data += "<td>" + "<input type='button' id='" + value.id + "' onclick='CallMe(" + value.id + ")' value='Delete'>" + "</td>";
+                event_data += "<td>" + "<input type='button' id='" + value.id + "' onclick='show(" + value.id + ")' value='Edit'>" + "</td>";
+                event_data += '<tr>';
+            });
+            $("#table").append(event_data);
+        },
+        error: function(d){
+            /*console.log("error");*/
+            alert("404. Please wait until the File is Loaded.");
+        },
+
+    });
+});
+
+function CallMe(id) {
+    $.ajax({
+        url: "http://localhost:9000/delete/"+id,
+        dataType: 'json',
+        type: 'get',
+        cache:false,
+        success: function(data){
+            if(data == "200"){
+                location.replace("/list");
+            }
+
+        },
+        error: function(d){
+            /*console.log("error");*/
+            alert("d");
+        },
+
+    });
+}
+
+function show(){
+<!--        window.location.replace("http://localhost:9000/list");-->
+ var table = document.getElementById('table');
+
+                for(var i = 1; i < table.rows.length; i++)
+                {
+                    table.rows[i].onclick = function()
+                    {
+                         //rIndex = this.rowIndex;
+                         document.getElementById("id").value = this.cells[0].innerHTML;
+                         document.getElementById("name").value = this.cells[1].innerHTML;
+                         document.getElementById("email").value = this.cells[2].innerHTML;
+                         document.getElementById("phone").value = this.cells[3].innerHTML;
+                    };
+                }
+        }
+
+<!---------------------------------->
+
+$(document).ready(function(){
+        $("#Update").on('click',function(){
+            updateData();
+        });
+
+function updateData(){
+var id = $('input#id').val();
+var name = $('input#name').val();
+var email = $('input#email').val();
+var phone= $('input#phone').val();
+
+ $.ajax({
+ url: '/update',   <!-- url for updating-->
+ dataType: 'JSON',
+   type: "POST",
+            data:{
+                'id': id,
+                'name': name,
+                'email': email,
+                'phone': phone,
+
+            },
+
+             success: function (data) {
+<!--              $('tr').function-->
+                console.log(" success");
+                window.location.href = "/list";
+                },
+            error: function (data) {
+                console.log(" error");
+            }
+   });
+ }
+});
+
+</script>
+
+</body>
+</html>

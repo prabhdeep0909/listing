@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+    <meta name="robots" content="noindex, nofollow">
+    <!-- Include CSS File Here -->
+    <link rel="stylesheet" href="css/style.css"/>
+    <!-- Include JS File Here -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/registration.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="jquery.validate.js"></script>
+
+    <style>
+        .userform{width: 400px;}
+        .userform p {
+         width: 100%;
+        }
+        .userform label {
+         width: 120px;
+        color: #333;
+        float: left;
+        }
+        input.error {
+        border: 1px dotted red;
+        }
+        label.error{
+        width: 100%;
+        color: red;
+        font-style: italic;
+        margin-left: 120px;
+        margin-bottom: 5px;
+        }
+        .userform input.submit {
+        margin-left: 120px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="main">
+<!--        <form class="userform" id="userForm" method="post" action="" onsubmit = "return(validate()">-->
+
+
+             <p>
+                <label for="name">Name</label>
+                 <input id="name" name="name" type="text" >
+             </p>
+
+
+            <p>
+                <label for="email">E-Mail</label>
+                <input id="email" type="email" name="email" >
+            </p>
+            <p>
+                <label for="phone">Phone</label>
+                <input id="phone" type="phone" name="phone" >
+            </p>
+
+            <p>
+
+                <input class="submit" type="submit" value="Submit" id="submit">
+            </p>
+<!--        </form>-->
+
+    </div>
+</div>
+
+<script>
+
+<!--// Form validation code will come here.-->
+<!--      function validate() {-->
+
+<!--         if( document.myForm.Name.value == "" ) {-->
+<!--            alert( "Please provide your name!" );-->
+<!--            document.myForm.Name.focus() ;-->
+<!--            return false;-->
+<!--         }-->
+<!--         if( document.myForm.EMail.value == "" ) {-->
+<!--            alert( "Please provide your Email!" );-->
+<!--            document.myForm.EMail.value.length<=30;-->
+
+<!--            document.myForm.EMail.focus() ;-->
+<!--            return false;-->
+<!--         }-->
+
+
+<!--         return( true );-->
+<!--      }-->
+<!----------------------------------------------------------------------------------------------->
+
+$(document).ready(function(){
+        $("#submit").click(function(){
+            submitRegistrationData();
+        });
+
+function submitRegistrationData(){
+var name = $('input#name').val();
+var email = $('input#email').val();
+var phone= $('input#phone').val();
+
+
+$.ajax({
+url: '/dataform/savedata',   <!-- url for saving-->
+ dataType: 'JSON',
+   type: "POST",
+            data:{
+                'name': name,
+                'email': email,
+                'phone': phone,
+
+            },
+
+             success: function (data) {
+                window.location.href = "/list";   <!-- to redirect-->
+                },
+            error: function (data) {
+                console.log(" error"+ data);
+            }
+});
+}
+});
+
+</script>
+</body>
+</html>

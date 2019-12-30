@@ -1,0 +1,18 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+
+GET                 /form                       controllers.DataController.dataresult(request: Request)
+GET                 /list                       controllers.DataController.datapage(request: Request)
+GET                 /dataform                   controllers.DataController.dataform
+POST                /savedata                   controllers.DataController.savedata(request: Request)
+#GET                 /update/:id                 controllers.DataController.update(request: Request,id: Integer)
+POST                /update                     controllers.DataController.update()
+
+GET                 /delete/:id                 controllers.DataController.deletedata(request: Request, id: Integer)
+
+# Map static resources from the /public folder to the /assets URL path
+#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+#GET     /javascriptRoutes           controllers.Application.javascriptRoutes(request: Request)
