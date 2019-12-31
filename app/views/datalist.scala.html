@@ -8,18 +8,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
+
 <body>
-Id:&nbsp<input type="hidden" name="id" id="id" ><br><br>
-Name:&nbsp<input type="text" name="name" id="name" pattern="([^\s][A-z\s]+)"><br><br>
-Email:&nbsp<input type="email" name="email" id="email" ><br><br>
-Phone:&nbsp<input type="text" name="phone" id="phone"><br><br>
-
-<input class="submit" type="submit" value="Submit" id="submit">
-<input class="Update" type="submit" value="Update" id="Update">
-
+<form  name="validation" action="post" >
 <div class="container">
-    <div class="container-fluid"   align="center" >
+    <div class="container-fluid"   align="center" style="border-style:solid; border-width:1px; margin:10% auto; width:701px; background-color:orange">
 
+
+
+            <label for="id" hidden>Id:</label>
+            <input type="hidden" name="id" id="id" ><br><br>
+
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name"><br><br>
+            <label for="email">Enter email:</label>
+            <input type="email" name="email" id="email" ><br><br>
+
+            <label for="phone">Phone:</label>
+            <input type="text" name="phone" id="phone"><br><br>
+
+            <input class="submit" type="button" value="Submit" id="submit">
+            <input class="Update" type="button" value="Update" id="Update">
+            <input class="back" type="submit" value="Back" id="back">
+
+    </div>
+
+
+    <div class="container-fluid" align="center" style="border-style:solid; border-width:1px; margin:10% auto;background-color:grey">
         <h1>Details </h1>
 
         <br>
@@ -35,43 +50,45 @@ Phone:&nbsp<input type="text" name="phone" id="phone"><br><br>
             </tr>
 
             <thead class="thead-dark">
-           </tbody>
+            </tbody>
         </table>
 
     </div>
 </div>
+</form>
 <script>
 $(document).ready(function(){
-        $("#submit").click(function(){
+        $("input#submit").on('click',function(){
             submitRegistrationData();
         });
 
 function submitRegistrationData(){
+
 var name = $('input#name').val();
 var email = $('input#email').val();
 var phone= $('input#phone').val();
 
+if(validate(name, email, phone)) {
+            $.ajax({
+            url: '/savedata',   <!-- url for saving-->
+             dataType: 'JSON',
+               type: "POST",
+                        data:{
 
-$.ajax({
-url: '/savedata',   <!-- url for saving-->
- dataType: 'JSON',
-   type: "POST",
-            data:{
+                            'name': name,
+                            'email': email,
+                            'phone': phone,
 
-                'name': name,
+                        },
 
-                'email': email,
-                'phone': phone,
-
-            },
-
-             success: function (data) {
-                window.location.href = "/list";   <!-- to redirect-->
-                },
-            error: function (data) {
-                console.log(" error"+ data);
-            }
-});
+                         success: function (data) {
+                            window.location.href = "/list";   <!-- to redirect-->
+                            },
+                        error: function (data) {
+                            console.log(" error"+ data);
+                        }
+        });
+   }
 }
 });
 
@@ -181,8 +198,41 @@ var phone= $('input#phone').val();
    });
  }
 });
+<!--------------------------------------------------------------------------->
+
+function validate(a,b,c)
+{
+
+if(a==""|| a<5 || a>20 || !isNaN(a))
+    {
+    alert("Please Enter Your Name");
+    document.form.name.focus();
+    return false;
+    }
+if(b==""|| b!=10 || isNaN(b))
+    {
+    alert("Please Enter a valid number");
+    document.form.phone.focus();
+    return false;
+    }
+if(c=="")
+    {
+    alert("Please Enter a valid email");
+    document.form.email.focus();
+    return false;
+    }
+
+return true;
+}
+
+
+
 
 </script>
 
 </body>
 </html>
+
+
+
+
